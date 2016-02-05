@@ -104,7 +104,7 @@ vector<Fragment> parse_opt_map(string fileName, int topN = numeric_limits<int>::
 		exit(EXIT_FAILURE);
 	}
 
-	string line;
+	string line, frag_name;
 	char buffer[20];
 	vector<string> cleavageSites;
 	kstring_t str = { 0, 0, 0 };
@@ -121,9 +121,16 @@ vector<Fragment> parse_opt_map(string fileName, int topN = numeric_limits<int>::
 			ss >> strBuffer;
 			while (ss >> strBuffer) cleavageSites.push_back(strBuffer);
 		}
+
+        // do this properly in c++ style
+        int i = 0;
+        while ( str.s[i] && !isspace(str.s[i]) ) i++;
+        if ( i ) frag_name = line.substr(0,i);
+
 		if (line.find_first_of("KpnI") != string::npos)
 		{
 			Fragment f;
+            f.name = frag_name;
 
 			int pos = -1;
 
@@ -561,6 +568,7 @@ void SerializeMappings(Mappings *omMappings, vector<Fragment> &optMap, RefMaps &
 	{
 		if (ixOM < params.ixOmStart || (ixOM > params.ixOmEnd && params.ixOmEnd != -1)) continue;
 		ss << "EXP_OPTMAP_IX: " << ixOM << endl; logger.Log(Logger::RESFILE, ss);
+        ss << "NAME: " << optMap[ixOM].name << endl; logger.Log(Logger::STDOUT, ss);
 		Mappings mappings = omMappings[ixOM];
 		for (int ixMappings = 0; ixMappings < mappings.size(); ixMappings++)
 		{
