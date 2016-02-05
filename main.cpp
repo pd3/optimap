@@ -527,6 +527,7 @@ Mappings* AlignOpticalMaps(vector<Fragment> &optMap, RefMaps &refMaps, map<int, 
 	int ixFrom = 0, ixTo = optMap.size() - 1;
 	if (params.ixOmStart > 0) ixFrom = params.ixOmStart;
 	if (params.ixOmEnd >= 0) ixTo = params.ixOmEnd;
+	if (ixTo >= optMap.size() ) ixTo = optMap.size() - 1;
 
 	while (ixFrom <= ixTo)
 	{
